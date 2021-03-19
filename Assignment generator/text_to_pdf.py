@@ -1,55 +1,60 @@
 import numpy as np
 from PIL import Image,ImageDraw,ImageFont
 import textwrap
+import json
+
+
  
 
 def textlist(text): # converts text into list of strings
 	list1 = text.split("\n")
 	textlist = []
 	for text in list1:
-		textlist= textlist + textwrap.wrap(text,width = 55)
+		textlist= textlist + textwrap.wrap(text,width = data["width"])
 	return(textlist)
 
-def makedoc(image,textlist,font): # draws the custom font text on image 
+def makedoc(data,textlist): # draws the custom font text on image 
 	#load image 
-	img = Image.open(image).convert('RGB')
+	img = Image.open(data["BgImg"]).convert('RGB')
 	draw = ImageDraw.Draw(img)
-	pixellat=ImageFont.truetype(font,12)
+	pixellat=ImageFont.truetype(data["Font"],data["Fontsize"])
 	imagelist = []
-	imagge = 0
+	page1 = 0
 	#generate document
-	x = 50
-	y = 54
+
 	i = 0
 	k = 0 
 	for text in textlist:
-		draw.text((x,(y + int(i*23.5))),text,(0,0,0),font=pixellat,spacing = 11,align ="left")
+		draw.text((data["x-axis"],(data["y-axis"] + int(i*float(data["line spacing"])))),text,(0,0,0),font=pixellat)
 		i = i + 1
 		if i == 20 and k == 0:
 			i = 0
 			imagge = img # loading next page
-			img = Image.open(image).convert('RGB')
+			img = Image.open(data["BgImg"]).convert('RGB')
 			draw = ImageDraw.Draw(img)
 			k = 1
 		elif i == 20:
 			i = 0
 			imagelist.append(img) # loading next page
-			img = Image.open(image).convert('RGB')
+			img = Image.open(data["BgImg"]).convert('RGB')
 			draw = ImageDraw.Draw(img)
 	if k == 0:
 		imagge  = img
 	else:
 		imagelist.append(img)	
-	imagge.save('imagelist.pdf',save_all=True, append_images=imagelist)	# saving the final pdf
+	imagge.save('output.pdf',save_all=True, append_images=imagelist)	# saving the final pdf
  	
- 	
-image = 'ruled.jpg'
-inputtext = 'test.text'
-font = 'blzee.ttf'
-f = open(inputtext, "r")
+with open('settings.json') as f:
+  data = json.load(f)
+	
+#image = 'ruled.jpg'
+#inputtext = 'test.text'
+#font = 'blzee.ttf'
+f = open(data["Inputext"], "r")
 text = textlist(f.read())
 f.close
-makedoc(image,text,font)
+
+makedoc(data,text)
 
 
 
