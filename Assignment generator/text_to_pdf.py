@@ -7,7 +7,7 @@ import json
  
 
 def textlist(text): # converts text into list of strings
-	list1 = text.split("\n")
+	list1 = text.split("<br />")
 	textlist = []
 	for text in list1:
 		textlist= textlist + textwrap.wrap(text,width = data["width"])
@@ -21,7 +21,8 @@ def makedoc(data,textlist): # draws the custom font text on image
 	imagelist = []
 	page1 = 0
 	#generate document
-
+	#draw.text((data["x-axis"],10,data["name"],(0,0,0),font=pixellat))
+	#draw.text(300,10,str(data["Roll"]),(0,0,0),font=pixellat)
 	i = 0
 	k = 0 
 	for text in textlist:
