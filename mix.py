@@ -30,7 +30,7 @@ letter_spacing = 10
 max_lines = 18
 
 
-inputtext = 'test2.text'
+inputtext = 'test.text'
 f = open(inputtext, "r")
 text = textlist(f.read())
 f.close
